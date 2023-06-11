@@ -1,8 +1,6 @@
 # Ignore node_modules
 node_modules/
 
-# Ignore all .env files
-*.env
-
-# Include env.example
-!.env.example
+# Ignore all .env files in src/config except env.example
+src/config/.env*
+!src/config/env.example
