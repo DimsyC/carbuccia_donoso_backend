@@ -1,5 +1,5 @@
 const { MongoClient, GridFSBucket } = require("mongodb");
-const { cxnString, dbName } = require("../config");
+const config = require("../config");
 
 let db;
 let gridFSBucket;
@@ -8,11 +8,11 @@ const connect = async () => {
   if (db) {
     return db;
   }
-  const client = new MongoClient(cxnString);
+  const client = new MongoClient(config.mongodb.cxnString);
 
   try {
     await client.connect();
-    db = client.db(dbName);
+    db = client.db(config.mongodb.dbName);
     console.log("MongoDB Connection Successful");
 
     // Create the database and collections if they don't exist
@@ -39,6 +39,7 @@ const createCollectionIfNotExists = async (collectionName) => {
 
 const createCollections = async () => {
   await createCollectionIfNotExists("projects");
+  await createCollectionIfNotExists("users");
   // Add more collection creation calls here if needed
 };
 

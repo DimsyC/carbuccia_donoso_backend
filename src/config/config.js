@@ -10,12 +10,28 @@ const envPath = path.resolve(__dirname, `.env.${env}`);
 // Load the environment variables from the specified .env file
 dotenv.config({ path: envPath });
 
-// Configuration object
-const config = {
+
+const mongodb = {
   cxnString: process.env.DB_CXN_STRING,
   dbName: process.env.DB_NAME,
+}
+
+const express = {
   host: process.env.HOST,
-  port: process.env.PORT
+  port: process.env.PORT,
+  sessionSecret:process.env.SESSION_SECRET
+}
+
+const googleOAuth = {
+  clientID: process.env.GOOGLE_OAUTH_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_OAUTH_CLIENT_SECRET
+}
+// Configuration object
+const config = {
+  mongodb,
+  express,
+  googleOAuth
 };
 
 module.exports = config;
+
