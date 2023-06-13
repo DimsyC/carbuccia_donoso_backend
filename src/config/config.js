@@ -19,18 +19,24 @@ const mongodb = {
 const express = {
   host: process.env.HOST,
   port: process.env.PORT,
-  sessionSecret:process.env.SESSION_SECRET
 }
 
 const googleOAuth = {
   clientID: process.env.GOOGLE_OAUTH_CLIENT_ID,
   clientSecret: process.env.GOOGLE_OAUTH_CLIENT_SECRET
 }
+
+const jwt = {
+  secret: process.env.JWT_SECRET,
+  duration: process.env.JWT_DURATION,
+}
+
 // Configuration object
 const config = {
   mongodb,
   express,
-  googleOAuth
+  googleOAuth,
+  jwt
 };
 
 module.exports = config;

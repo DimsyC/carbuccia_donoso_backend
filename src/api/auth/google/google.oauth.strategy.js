@@ -1,6 +1,7 @@
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const config = require("../../../config");
 const Users = require("../../users/users.model");
+const config = require("../../../config");
+const jwt = require('../../../utils/jwt')
 
 const configurePassport = (passport) => {
   // Setup Google authentication strategy
@@ -17,11 +18,12 @@ const configurePassport = (passport) => {
           // Check if the user exists in the database
           const user = await Users.getByEmail(profile._json.email);
           if (user) {
-            // If the user exists, log them in
+             // If the user exists, generate a JWT token and return it
+             const token = jwt.generateToken(user)
+             user.token = token
+
             return done(null, user);
           }
-          console.log("profile", profile);
-          console.log("user", user);
 
           // Restrict user creation to only your email
           if (profile._json.email !== "dimsy_donoso@hotmail.com") {
@@ -31,35 +33,20 @@ const configurePassport = (passport) => {
           }
 
           // If the user doesn't exist, create a new user in the database and log them in
-          const newUser = {
+          const newUserData = {
             email: profile._json.email,
             password: "", // You can generate a random password or leave it blank
             providers: [profile.provider],
           };
-          const userId = await Users.create(newUser);
-          newUser._id = userId;
+          const newUser = await Users.create(newUserData);
 
           return done(null, newUser);
         } catch (error) {
-          return done(error);
+          return done(error);   
         }
       }
     )
   );
-  // Serialize user
-  passport.serializeUser((user, done) => {
-    done(null, user._id);
-  });
-
-  // Deserialize user
-  passport.deserializeUser(async (id, done) => {
-    try {
-      const user = await Users.getById(id);
-      done(null, user);
-    } catch (error) {
-      done(error);
-    }
-  });
 };
 
 module.exports = configurePassport;

@@ -8,12 +8,11 @@ const {
 const validateUpload = require("../../middleware/validate.upload");
 const validateSchema = require("../../middleware/validate.schema");
 const validateId = require("../../middleware/validate.id");
-
 const Projects = require("./projects.model");
-
 const projectController = require("./projects.controller");
 
 const projectRouter = express.Router();
+
 
 projectRouter.get("/", projectController.getAllProjects);
 projectRouter.get("/:id", validateId, projectController.getProjectById);
